@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 
-
+import java.util.Scanner;
 /**
  *
  * @author ramirito
@@ -77,7 +77,8 @@ public class Inventario {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("Ingrese el codigo del producto");
+    Scanner teclado = new Scanner(System.in);
     }
     
 
