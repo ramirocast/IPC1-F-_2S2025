@@ -1,22 +1,24 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-import java.util.Scanner;
+
 /**
  *
  * @author ramirito
  */
 public class producto {
-    
-    
+    // Clase Producto
+// Representa un producto de la tienda (camisa, pantalón, etc.)
+
     String codigo;
     String nombre;
     String categoria;
     double precio;
     int cantidad;
 
+    // Constructor
     public producto(String codigo, String nombre, String categoria, double precio, int cantidad) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -24,61 +26,12 @@ public class producto {
         this.precio = precio;
         this.cantidad = cantidad;
     }
-}
 
-public class Venta {
-    String codigoProducto;
-    int cantidadVendida;
-    String fechaHora;
-    double total;
-
-    public Venta(String codigoProducto, int cantidadVendida, String fechaHora, double total) {
-        this.codigoProducto = codigoProducto;
-        this.cantidadVendida = cantidadVendida;
-        this.fechaHora = fechaHora;
-        this.total = total;
+    // Método para mostrar la información del producto
+    public void mostrarInfo() {
+        System.out.println(codigo + " | " + nombre + " | " + categoria +
+                           " | Q" + precio + " | Stock: " + cantidad);
     }
 }
 
-public class Inventario {
-    producto[] productos = new producto[100]; // vector, no ArrayList
-    int contador = 0;
-
-    public void agregarProducto(producto p) {
-        productos[contador] = p;
-        contador++;
-    }
-
-    public producto buscarPorCodigo(String codigo) {
-        for (int i = 0; i < contador; i++) {
-            if (productos[i].codigo.equals(codigo)) {
-                return productos[i];
-            }
-        }
-        return null;
-    }
-
-    public boolean eliminarProducto(String codigo) {
-        for (int i = 0; i < contador; i++) {
-            if (productos[i].codigo.equals(codigo)) {
-                productos[i] = productos[contador - 1]; 
-                productos[contador - 1] = null;
-                contador--;
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        System.out.println("Ingrese el codigo del producto");
-    Scanner teclado = new Scanner(System.in);
-    }
-    
 
