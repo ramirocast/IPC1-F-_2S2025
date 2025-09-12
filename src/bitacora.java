@@ -7,24 +7,24 @@
  *
  * @author ramirito
  */
-public class bitacora {
-    // Clase Bitacora
-// Registra las acciones que hace el usuario durante la ejecución
+import java.time.LocalDateTime;
 
+public class bitacora {
     String fechaHora;
     String accion;
     boolean correcta;
+    String usuario;
 
-    public bitacora(String fechaHora, String accion, boolean correcta) {
-        this.fechaHora = fechaHora;
+    public bitacora(String accion, boolean correcta, String usuario) {
+        this.fechaHora = LocalDateTime.now().toString(); // guarda fecha y hora actual
         this.accion = accion;
         this.correcta = correcta;
+        this.usuario = usuario;
     }
 
     public void mostrarInfo() {
-        System.out.println("[" + fechaHora + "] " + accion + 
-                           " -> " + (correcta ? "Correcta" : "Errónea"));
+        System.out.println("[" + fechaHora + "] Usuario: " + usuario +
+                           " | Acción: " + accion +
+                           " | Resultado: " + (correcta ? "Correcta" : "Errónea"));
     }
 }
-
-    
