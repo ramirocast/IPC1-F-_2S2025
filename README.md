@@ -30,17 +30,17 @@ https://github.com/itext/itextpdf
 
 ### 3. Compilar el Proyecto en Netbeans o bien:
 
-# Navegar a la carpeta src
+#### Navegar a la carpeta src
 cd Proyecto1/src
 
-# Compilar todos los archivos (ajustar la ruta de itextpdf)
+#### Compilar todos los archivos (ajustar la ruta de itextpdf)
 javac -cp .:itextpdf-5.5.13.3.jar *.java
 
 
-### 4. Ejecutar la Aplicación
+#### 4. Ejecutar la Aplicación
 java -cp .:itextpdf-5.5.13.3.jar main
 
-# Uso del Programa
+## Uso del Programa
 Menú Principal
 Al ejecutar el programa, se mostrará un menú con las siguientes opciones:
 
@@ -62,7 +62,7 @@ Al ejecutar el programa, se mostrará un menú con las siguientes opciones:
 
 -Generar reporte de inventario: Crear PDF con historial de ventas
 
-# Flujo de Trabajo Típico
+## Flujo de Trabajo Típico
 -Agregar productos al inventario
 
 -Registrar ventas cuando ocurran
@@ -75,7 +75,7 @@ Al ejecutar el programa, se mostrará un menú con las siguientes opciones:
 
 
 
-# Validaciones Implementadas
+## Validaciones Implementadas
 -Código de producto único
 
 -Nombre y categoría no vacíos
@@ -88,12 +88,12 @@ Al ejecutar el programa, se mostrará un menú con las siguientes opciones:
 
 -Control de errores en entrada de datos
 
-# Formatos de Archivo
+## Formatos de Archivo
 -ventas.txt: Registro histórico de ventas
 
 -PDF reports: Reportes con timestamp en el nombre (dd_MM_yyyy_HH_mm_ss)
 
-# Limitaciones Conocidas
+## Limitaciones Conocidas
 -Límite de 100 productos en inventario
 
 -Límite de 200 registros en bitácora
@@ -102,7 +102,7 @@ Al ejecutar el programa, se mostrará un menú con las siguientes opciones:
 
 -Requiere instalación manual de iTextPDF
 
-# Solución de Problemas
+## Solución de Problemas
 -Error: "Class not found" o "Package not found"
 Verifique que iTextPDF esté en el classpath
 
