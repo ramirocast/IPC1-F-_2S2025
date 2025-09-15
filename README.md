@@ -28,7 +28,7 @@ Si no tiene Java, descárguelo e instálelo desde Oracle JDK o OpenJDK
 Descargar la biblioteca iTextPDF desde:
 https://github.com/itext/itextpdf
 
-### 3. Compilar el Proyecto
+### 3. Compilar el Proyecto en Netbeans o bien:
 
 # Navegar a la carpeta src
 cd Proyecto1/src
