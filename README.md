@@ -37,7 +37,7 @@ cd Proyecto1/src
 javac -cp .:itextpdf-5.5.13.3.jar *.java
 
 
-#### 4. Ejecutar la Aplicación
+### 4. Ejecutar la Aplicación
 java -cp .:itextpdf-5.5.13.3.jar main
 
 ## Uso del Programa
