@@ -46,6 +46,13 @@ public class persistencia {
         for (String line : lines) {
             if (line.trim().isEmpty()) continue;
             String[] parts = splitPreservingEscapes(line, "\\|");
+
+// Validación: asegurarse de que haya suficientes campos
+if (parts.length < 11) {  // necesitamos al menos 11 elementos para PERSON
+    System.out.println("Linea invalida, faltan campos: " + line);
+    continue;  // saltar esta línea y continuar con la siguiente
+}
+
             if (parts.length == 0) continue;
             String type = parts[0];
             if (type.equals("PERSON")) {
