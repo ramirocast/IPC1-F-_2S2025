@@ -68,7 +68,7 @@ public class personaje {
     public synchronized boolean estaVivo() { return hp > 0; }
 
     // recibe daño; retorna daño real aplicado
-    public synchronized int recibirDanio(int rawDamage) {
+    public synchronized int recibirDano(int rawDamage) {
         // la defensa reduce el daño; siempre al menos 1 de daño si rawDamage > 0
         int reducido = Math.max(1, rawDamage - (defensa / 2));
         hp = Math.max(0, hp - reducido);

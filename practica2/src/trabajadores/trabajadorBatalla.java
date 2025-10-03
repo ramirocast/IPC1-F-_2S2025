@@ -1,4 +1,4 @@
-package workers;
+package trabajadores;
 
 import model.batalla;
 import model.personaje;
@@ -72,7 +72,7 @@ public class trabajadorBatalla extends SwingWorker<Void, String> {
 
                 // calcular daño bruto y aplicar
                 int raw = atacante.getAtaque();
-                int applied = defensor.recibirDanio(raw);
+                int applied = defensor.recibirDano(raw);
 
                 String msg = atacante.getNombre() + " atacó a " + defensor.getNombre()
                         + " - Daño: " + applied + " HP restante: " + defensor.getHp();
