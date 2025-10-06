@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class batalla {
+    
     private final int id;
     private static int nextId = 1;
     private final LocalDateTime fechaInicio;

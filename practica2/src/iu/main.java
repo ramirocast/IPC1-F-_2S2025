@@ -76,9 +76,13 @@ public class main extends JFrame {
         JButton btnAdd = new JButton("Agregar");
         JButton btnEdit = new JButton("Editar");
         JButton btnDelete = new JButton("Eliminar");
-        btns.add(btnAdd); btns.add(btnEdit); btns.add(btnDelete);
+        JButton btnBuscar = new JButton("Buscar");
+btns.add(btnBuscar);  btns.add(btnAdd); btns.add(btnEdit); btns.add(btnDelete);
         c.gridx = 0; c.gridy++; c.gridwidth = 2; form.add(btns, c);
         left.add(form, BorderLayout.SOUTH);
+        
+       
+
 
         // right: controls de batalla y logs
         JPanel controls = new JPanel();
@@ -108,6 +112,9 @@ public class main extends JFrame {
         btnDelete.addActionListener(e -> onDelete(cbA, cbB));
         btnStart.addActionListener(e -> onStartBattle(cbA, cbB));
         btnStop.addActionListener(e -> onStopBattle());
+        btnBuscar.addActionListener(e -> onBuscar());
+        
+
 
         table.getSelectionModel().addListSelectionListener((ListSelectionEvent ev) -> {
             if (!ev.getValueIsAdjusting() && table.getSelectedRow() >= 0) fillFormFromSelected();
@@ -118,9 +125,34 @@ public class main extends JFrame {
         JMenu file = new JMenu("Archivo");
         JMenuItem miSave = new JMenuItem("Guardar...");
         JMenuItem miLoad = new JMenuItem("Cargar...");
+        JMenuItem miHistorial = new JMenuItem("Ver Historial");
+file.add(miHistorial);
+
+miHistorial.addActionListener(e -> {
+    StringBuilder sb = new StringBuilder();
+    for (batalla b : historial.getAll()) {
+        sb.append(b.toString()).append("\n\n");
+    }
+    JTextArea area = new JTextArea(sb.toString(), 20, 60);
+    area.setEditable(false);
+    JOptionPane.showMessageDialog(this, new JScrollPane(area), "Historial de Batallas", JOptionPane.INFORMATION_MESSAGE);
+});
+ JMenuItem miEstudiante = new JMenuItem("Datos del Estudiante");
+file.add(miEstudiante);
+
+miEstudiante.addActionListener(e -> JOptionPane.showMessageDialog(this,
+        "Nombre: Ramiro Andres Castellanos Davila\n" +
+        "Carné: 202320574\n" +
+        "Sección: B\n" +
+        "Curso: IPC1 - 2do Semestre 2025",
+        "Datos del Estudiante", JOptionPane.INFORMATION_MESSAGE));
         file.add(miSave); file.add(miLoad);
         mb.add(file);
         setJMenuBar(mb);
+       
+
+
+
 
         miSave.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
@@ -152,6 +184,12 @@ public class main extends JFrame {
                 } catch (Exception ex) { JOptionPane.showMessageDialog(this,"Error cargando: "+ex.getMessage()); }
             }
         });
+        
+        miHistorial.addActionListener(e -> {
+    StringBuilder sb = new StringBuilder();
+    for (batalla b : historial.getAll()) {
+        sb.append(b.toString()).append("\n\n");
+    }
 
         // double click to quick-fill form
         table.addMouseListener(new MouseAdapter() {
@@ -159,7 +197,9 @@ public class main extends JFrame {
                 if (e.getClickCount() == 2) fillFormFromSelected();
             }
         });
-    }
+        });
+                }
+
 
     private void onAdd(JComboBox<String> cbA, JComboBox<String> cbB) {
         try {
@@ -338,4 +378,18 @@ public class main extends JFrame {
             app.setVisible(true);
         });
     }
+    private void onBuscar() {
+    String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre a buscar:");
+    if (nombre == null || nombre.isEmpty()) return;
+    for (int i = 0; i < tableModel.getRowCount(); i++) {
+        if (tableModel.getValueAt(i, 1).toString().equalsIgnoreCase(nombre.trim())) {
+            table.setRowSelectionInterval(i, i);
+            table.scrollRectToVisible(table.getCellRect(i, 0, true));
+            return;
+        }
+    }
+    JOptionPane.showMessageDialog(this, "Personaje no encontrado");
+}
+
+    
 }
