@@ -1,24 +1,24 @@
 package sancarlistashop;
 
-import com.sancarlista.shop.controller.AuthController;
-import com.sancarlista.shop.model.Administrador;
-import com.sancarlista.shop.util.Serializador;
-import com.sancarlista.shop.view.LoginView;
-import com.sancarlista.shop.util.DataManager;
+import controlador.controlador;
+import model.administrador;
+import util.serializador;
+import vista.vistaLogin;
+import util.administradorDatos;
 
 import javax.swing.*;
 
 public class main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            DataManager data = (DataManager) Serializador.cargarEstado("data.ser");
+            administradorDatos data = (administradorDatos) serializador.cargarEstado("data.ser");
             if (data == null) {
-                data = new DataManager();
+                data = new administradorDatos();
                 // Inicializa admin
-                data.agregarUsuario(new Administrador("admin", "Admin Inicial", "M", "IPC1A")); // Ajusta sección
+                data.agregarUsuario(new administrador("admin", "Admin Inicial", "M", "IPC1A")); // Ajusta sección
             }
-            AuthController authController = new AuthController(data);
-            new LoginView(authController);
+            controlador controlador = new controlador(data);
+            new vistaLogin(controlador);
         });
     }
 }
