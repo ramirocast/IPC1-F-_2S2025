@@ -5,39 +5,26 @@ import java.io.Serializable;
 public abstract class usuario implements Serializable {
     protected String codigo;
     protected String nombre;
-    protected String genero;
-    protected String contraseña;
+    protected String contrasena;
+    protected String tipo;
 
-    public usuario(String codigo, String nombre, String genero, String contraseña) {
+    public usuario(String codigo, String nombre, String contrasena, String tipo) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.genero = genero;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
+        this.tipo = tipo;
     }
 
-    public String getCodigo() {
-        return codigo;
-    }
+    public String getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public String getContrasena() { return contrasena; }
+    public String getTipo() { return tipo; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public String getGenero() {
-        return genero;
+    @Override
+    public String toString() {
+        return "[" + tipo + "] " + codigo + " - " + nombre;
     }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    public abstract String getRol();
 }

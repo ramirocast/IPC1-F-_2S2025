@@ -1,12 +1,10 @@
 package hilo;
 
-import util.administradorDatos;
-
-import java.util.Date;
+import model.administradorDatos;
 
 public class monitorEstadisticas extends Thread {
     private administradorDatos data;
-    private boolean running = true;
+    private boolean activo = true;
 
     public monitorEstadisticas(administradorDatos data) {
         this.data = data;
@@ -14,17 +12,21 @@ public class monitorEstadisticas extends Thread {
 
     @Override
     public void run() {
-        while (running) {
-            System.out.println("Ventas del día: " + data.getVentasDelDia() + " | Productos registrados: " + data.getProductosRegistrados() + " | " + new Date());
+        while (activo) {
+            int totalUsuarios = data.getAllUsuarios().length;
+int totalProductos = data.getProductos().length;
+int totalPedidos = data.getHistorialGlobal().length;
+
+            System.out.println("[MonitorEstadisticas] Usuarios: " + totalUsuarios +
+                    " | Productos: " + totalProductos +
+                    " | Pedidos: " + totalPedidos);
             try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                Thread.sleep(30000);
+            } catch (InterruptedException ignored) {}
         }
     }
 
     public void detener() {
-        running = false;
+        activo = false;
     }
 }

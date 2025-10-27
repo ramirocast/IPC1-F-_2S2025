@@ -1,12 +1,11 @@
 package hilo;
 
-import util.administradorDatos;
-
-import java.util.Date;
+import model.administradorDatos;
+import model.pedido;
 
 public class monitorPedidos extends Thread {
     private administradorDatos data;
-    private boolean running = true;
+    private boolean activo = true;
 
     public monitorPedidos(administradorDatos data) {
         this.data = data;
@@ -14,17 +13,23 @@ public class monitorPedidos extends Thread {
 
     @Override
     public void run() {
-        while (running) {
-            System.out.println("Pedidos Pendientes: " + data.getPedidosPendientesCount() + " - Procesando... " + new Date());
+        while (activo) {
+            pedido[] pedidos = data.getHistorialGlobal();
+long pendientes = 0;
+for (int i = 0; i < pedidos.length; i++) {
+    if (pedidos[i] != null && "Pendiente".equals(pedidos[i].getEstado())) {
+        pendientes++;
+    }
+}
+
+            System.out.println("[MonitorPedidos] Pedidos pendientes: " + pendientes);
             try {
-                Thread.sleep(8000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                Thread.sleep(20000);
+            } catch (InterruptedException ignored) {}
         }
     }
 
     public void detener() {
-        running = false;
+        activo = false;
     }
 }

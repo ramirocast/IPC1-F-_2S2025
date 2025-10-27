@@ -3,18 +3,21 @@ package util;
 import java.io.*;
 
 public class serializador {
-    public static void guardarEstado(Object obj, String archivo) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-            oos.writeObject(obj);
+    public static void guardarEstado(Object data, String rutaArchivo) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(rutaArchivo))) {
+            oos.writeObject(data);
+            System.out.println("[Serializador] Estado guardado correctamente.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al guardar estado: " + e.getMessage());
         }
     }
 
-    public static Object cargarEstado(String archivo) {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
+    public static Object cargarEstado(String rutaArchivo) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(rutaArchivo))) {
+            System.out.println("[Serializador] Estado cargado correctamente.");
             return ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
+            System.out.println("[Serializador] No se pudo cargar estado, se iniciará nuevo.");
             return null;
         }
     }

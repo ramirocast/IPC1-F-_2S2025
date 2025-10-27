@@ -1,28 +1,19 @@
 package hilo;
 
-import util.administradorDatos;
-
 public class monitorSesiones extends Thread {
-    private administradorDatos data;
-    private boolean running = true;
-
-    public monitorSesiones(administradorDatos data) {
-        this.data = data;
-    }
+    private boolean activo = true;
 
     @Override
     public void run() {
-        while (running) {
-            System.out.println("Usuarios Activos: " + data.getUsuariosActivos() + " - Última actividad: " + new Date());
+        while (activo) {
+            System.out.println("[MonitorSesiones] Sesión activa...");
             try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                Thread.sleep(15000);
+            } catch (InterruptedException ignored) {}
         }
     }
 
     public void detener() {
-        running = false;
+        activo = false;
     }
 }

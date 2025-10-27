@@ -2,6 +2,34 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/sancarlistashop/main.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/usuario.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/administrador.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/vendedor.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/cliente.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/producto.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/productoTecnologico.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/productoAlimento.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/productoGeneral.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/pedido.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/ingresoStock.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/model/bitacora.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/util/administradorDatos.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/controlador/controlador.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/controlador/controlAdmin.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/controlador/controlVendedor.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/controlador/controlCliente.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/util/serializador.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/util/CSVUtil.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/util/PDFUtil.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/vista/vistaLogin.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/vista/vistaAdmin.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/vista/vistaVendedor.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/vista/vistaCliente.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/hilo/monitorSesiones.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/hilo/monitorPedidos.java</file>
+            <file>file:/C:/Users/ramirito/Desktop/clonar/IPC1-F-_2S2025/proyecto2/src/hilo/monitorEstadisticas.java</file>
+        </group>
     </open-files>
 </project-private>

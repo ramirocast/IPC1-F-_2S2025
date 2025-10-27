@@ -1,84 +1,91 @@
 package vista;
 
 import controlador.controlCliente;
-import controlador.controlador;
-import model.itemPedido;
-import model.pedido;
-import model.producto;
-
+import model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class vistaCliente extends JFrame {
     private controlCliente controller;
-    private controlador authController;
-    private String clienteCode;
+    private JTable productosTable, carritoTable;
+    private DefaultTableModel productosModel, carritoModel;
 
     public vistaCliente(controlCliente controller) {
         this.controller = controller;
-        this.clienteCode = controller.clienteCode;
-        authController = new controlador(controller.data);
-
         setTitle("Cliente - Sancarlista Shop");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        JTabbedPane tabbedPane = new JTabbedPane();
-
-        // Tab Productos
-        JPanel productosPanel = new JPanel(new BorderLayout());
-        JTable productosTable = new JTable();
-        actualizarTablaProductos(productosTable);
-        productosPanel.add(new JScrollPane(productosTable), BorderLayout.CENTER);
-
-        JPanel productosButtons = new JPanel();
-        JButton agregarCarrito = new JButton("Agregar al Carrito");
-        agregarCarrito.addActionListener(e -> agregarCarritoDialog(productosTable));
-        productosButtons.add(agregarCarrito);
-
-        productosPanel.add(productosButtons, BorderLayout.SOUTH);
-        tabbedPane.addTab("Productos", productosPanel);
-
-        // Tab Carrito
-        JPanel carritoPanel = new JPanel(new BorderLayout());
-        JTable carritoTable = new JTable();
-        actualizarTablaCarrito(carritoTable);
-        carritoPanel.add(new JScrollPane(carritoTable), BorderLayout.CENTER);
-
-        JPanel carritoButtons = new JPanel();
-        JButton actualizarCantidad = new JButton("Actualizar Cantidad");
-        actualizarCantidad.addActionListener(e -> actualizarCantidadDialog(carritoTable));
-        carritoButtons.add(actualizarCantidad);
-
-        JButton eliminarCarrito = new JButton("Eliminar");
-        eliminarCarrito.addActionListener(e -> eliminarCarrito(carritoTable));
-        carritoButtons.add(eliminarCarrito);
-
-        JButton realizarPedido = new JButton("Realizar Pedido");
-        realizarPedido.addActionListener(e -> controller.realizarPedido());
-        carritoButtons.add(realizarPedido);
-
-        carritoPanel.add(carritoButtons, BorderLayout.SOUTH);
-        tabbedPane.addTab("Carrito", carritoPanel);
-
-        // Tab Historial
-        JPanel historialPanel = new JPanel(new BorderLayout());
-        JTable historialTable = new JTable();
-        actualizarTablaHistorial(historialTable);
-        historialPanel.add(new JScrollPane(historialTable), BorderLayout.CENTER);
-        tabbedPane.addTab("Historial", historialPanel);
-
-        add(tabbedPane);
-
-        JButton logout = new JButton("Logout");
-        logout.addActionListener(e -> authController.logout(clienteCode, this));
-        add(logout, BorderLayout.NORTH);
-
+        initUI();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    // Implement actualizarTablaProductos, carrito, historial
+    private void initUI() {
+        JTabbedPane tabs = new JTabbedPane();
 
-    // Dialogs for agregar, actualizar, eliminar
+        JPanel catalogo = new JPanel(new BorderLayout());
+        productosModel = new DefaultTableModel(new String[]{"Codigo", "Nombre", "Categoria", "Precio", "Stock"}, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+        productosTable = new JTable(productosModel);
+        catalogo.add(new JScrollPane(productosTable), BorderLayout.CENTER);
+
+        JPanel catButtons = new JPanel();
+        JTextField cantidadField = new JTextField(4);
+        JButton agregarBtn = new JButton("Agregar al carrito");
+        agregarBtn.addActionListener(e -> {
+            int row = productosTable.getSelectedRow();
+            if (row < 0) return;
+            String codigo = (String) productosModel.getValueAt(row, 0);
+            int cantidad;
+            try { cantidad = Integer.parseInt(cantidadField.getText()); } catch (Exception ex) { cantidad = 1; }
+            controller.agregarAlCarrito(codigo, cantidad);
+            refreshCarrito();
+        });
+        catButtons.add(new JLabel("Cantidad:")); catButtons.add(cantidadField); catButtons.add(agregarBtn);
+        catalogo.add(catButtons, BorderLayout.SOUTH);
+        tabs.addTab("Catálogo", catalogo);
+
+        JPanel carritoPanel = new JPanel(new BorderLayout());
+        carritoModel = new DefaultTableModel(new String[]{"Codigo", "Cantidad"}, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+        carritoTable = new JTable(carritoModel);
+        carritoPanel.add(new JScrollPane(carritoTable), BorderLayout.CENTER);
+
+        JPanel cartButtons = new JPanel();
+        JButton eliminarBtn = new JButton("Eliminar seleccionado");
+        eliminarBtn.addActionListener(e -> {
+            int r = carritoTable.getSelectedRow();
+            if (r < 0) return;
+            controller.eliminarDelCarrito(r);
+            refreshCarrito();
+        });
+        JButton realizar = new JButton("Realizar Pedido");
+        realizar.addActionListener(e -> {
+            controller.realizarPedido();
+            JOptionPane.showMessageDialog(this, "Pedido enviado.");
+            refreshCarrito();
+        });
+        cartButtons.add(eliminarBtn); cartButtons.add(realizar);
+        carritoPanel.add(cartButtons, BorderLayout.SOUTH);
+        tabs.addTab("Carrito", carritoPanel);
+
+        add(tabs, BorderLayout.CENTER);
+        refreshProductos();
+        refreshCarrito();
+    }
+
+    private void refreshProductos() {
+        productosModel.setRowCount(0);
+        for (producto p : controller.getProductosDisponibles())
+            productosModel.addRow(new Object[]{p.getCodigo(), p.getNombre(), p.getCategoria(), p.getPrecio(), p.getStock()});
+    }
+
+    private void refreshCarrito() {
+        carritoModel.setRowCount(0);
+        for (itemPedido it : controller.getCarritoItems())
+            carritoModel.addRow(new Object[]{it.getCodigoProducto(), it.getCantidad()});
+    }
 }

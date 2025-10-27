@@ -1,113 +1,75 @@
 package controlador;
 
-import model.cliente;
-import model.ingresoStock;
-import model.pedido;
-import model.producto;
-import util.CSVUtil;
-import util.administradorDatos;
+import model.*;
+import javax.swing.*;
+import java.io.*;
 
-public class controlVendedor implements CRUDInterface<cliente> {
-    private DataManager data;
-    private String vendedorCode;
+public class controlVendedor {
+    private administradorDatos data;
+    private vendedor user;
 
-    public controlVendedor(administradorDatos data, String vendedorCode) {
-        this.data = data;
-        this.vendedorCode = vendedorCode;
+    public controlVendedor(administradorDatos data, vendedor user) {
+        this.data = data; this.user = user;
     }
 
-    public producto[] getProductos() {
-        return data.getProductos();
-    }
+    public administradorDatos getData() { return data; }
 
-    public void agregarStock(String codigoProducto, int cantidad) {
-        producto producto = data.buscarProducto(codigoProducto);
-        if (producto != null) {
-            producto.agregarStock(cantidad);
-            data.agregarIngresoStock(new ingresoStock(vendedorCode, codigoProducto, cantidad));
-            data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "AGREGAR_STOCK", "EXITOSA", "Stock agregado: " + codigoProducto + ", Cantidad: " + cantidad));
-        }
-    }
-
-    public void cargarStockCSV(String fileName) {
-        String[][] lines = CSVUtil.leerCSV(fileName);
-        for (String[] line : lines) {
-            if (line.length == 2) {
-                agregarStock(line[0], Integer.parseInt(line[1]));
-            }
-        }
-        data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "CARGAR_STOCK_CSV", "EXITOSA", "Carga masiva desde " + fileName));
-    }
-
-    public void generarHistorialStockCSV(String fileName) {
-        String[][] lines = new String[data.getIngresosStock().length + 1][5];
-        lines[0] = new String[]{"Fecha", "Hora", "Usuario", "Producto", "Cantidad"};
-       ingresoStock[] ingresos = data.getIngresosStock();
-        for (int i = 0; i < ingresos.length; i++) {
-            lines[i + 1] = new String[]{new java.text.SimpleDateFormat("dd/MM/yyyy").format(ingresos[i].getFecha()), ingresos[i].getHora(), ingresos[i].getCodigoVendedor(), ingresos[i].getCodigoProducto(), String.valueOf(ingresos[i].getCantidad())};
-        }
-        CSVUtil.escribirCSV(fileName, lines);
-        data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "GENERAR_HISTORIAL_STOCK", "EXITOSA", "Historial generado en " + fileName));
-    }
-
-    @Override
-    public void crear(cliente cliente) {
-        data.agregarUsuario(cliente);
-        data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "CREAR_CLIENTE", "EXITOSA", "Cliente creado: " + cliente.getCodigo()));
-    }
-
-    @Override
-    public cliente leer(String codigo) {
-        usuario user = data.buscarUsuario(codigo);
-        if (user instanceof cliente) return (cliente) user;
-        return null;
-    }
-
-    @Override
-    public void actualizar(Cliente cliente) {
-        data.actualizarUsuario(cliente);
-        data.agregarBitacora(new BitacoraEntry("Vendedor", vendedorCode, "ACTUALIZAR_CLIENTE", "EXITOSA", "Cliente actualizado: " + cliente.getCodigo()));
-    }
-
-    @Override
-    public void eliminar(String codigo) {
-        data.eliminarUsuario(codigo);
-        data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "ELIMINAR_CLIENTE", "EXITOSA", "Cliente eliminado: " + codigo));
-    }
-
-    public cliente[] getClientes() {
-        return data.getClientes(vendedorCode);
-    }
-
-    public void cargarClientesCSV(String fileName) {
-        String[][] lines = CSVUtil.leerCSV(fileName);
-        for (String[] line : lines) {
-            if (line.length == 5) {
-                crear(new cliente(line[0], line[1], line[2], line[3], line[4]));
-            }
-        }
-        data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "CARGAR_CLIENTES_CSV", "EXITOSA", "Carga masiva desde " + fileName));
-    }
+    public producto[] getProductos() { return data.getProductos(); }
 
     public pedido[] getPedidosPendientes() {
-        return data.getPedidosPendientes();
+        // contar
+        pedido[] all = data.getHistorialGlobal();
+        int c = 0;
+        for (pedido p : all) if ("Pendiente".equals(p.getEstado())) c++;
+        // crear
+        pedido[] pend = new pedido[c];
+        int j = 0;
+        for (pedido p : all) if ("Pendiente".equals(p.getEstado())) pend[j++] = p;
+        return pend;
     }
 
-    public void confirmarPedido(pedido pedido) {
-        boolean stockOk = true;
-        for (itemPedido item : pedido.getItems()) {
-            producto prod = data.buscarProducto(item.getCodigoProducto());
-            if (prod != null && !prod.reducirStock(item.getCantidad())) {
-                stockOk = false;
-                break;
+    public void confirmarPedido(pedido p) {
+       p.confirmar(user.getCodigo());
+        user.incrementarVentas();
+        data.agregarBitacora(new bitacora(user.getCodigo(), "Confirmar Pedido", "Confirmó un pedido de " + p.getCodigoCliente()));
+    }
+
+    public void agregarStock(String codigo, int cantidad) {
+        producto pr = data.buscarProducto(codigo);
+        if (pr == null) { JOptionPane.showMessageDialog(null, "Producto no encontrado."); return; }
+        if (cantidad <= 0) { JOptionPane.showMessageDialog(null, "Cantidad > 0"); return; }
+        pr.agregarStock(cantidad);
+        data.agregarMovimiento(new stockMovimiento(codigo, "Entrada", cantidad));
+        data.agregarBitacora(new bitacora(user.getCodigo(), "Agregar Stock", "Agregó " + cantidad + " a " + codigo));
+    }
+
+    public void cargarStockCSV(String path) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                producto p = data.buscarProducto(parts[0]);
+                if (p != null) {
+                    int cant = Integer.parseInt(parts[1]);
+                    if (cant > 0) {
+                        p.agregarStock(cant);
+                        data.agregarMovimiento(new stockMovimiento(p.getCodigo(), "Entrada", cant));
+                    }
+                }
             }
-        }
-        if (stockOk) {
-            data.confirmarPedido(pedido, vendedorCode);
-            data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "CONFIRMAR_PEDIDO", "EXITOSA", "Pedido de cliente " + pedido.getCodigoCliente() + " confirmado"));
-        } else {
-            data.agregarBitacora(new bitacora("Vendedor", vendedorCode, "CONFIRMAR_PEDIDO", "FALLIDA", "Stock insuficiente para pedido de " + pedido.getCodigoCliente()));
-            JOptionPane.showMessageDialog(null, "Stock insuficiente", "Error", JOptionPane.ERROR_MESSAGE);
-        }
+            data.agregarBitacora(new bitacora(user.getCodigo(), "Carga CSV", "Actualizó stock desde CSV."));
+        } catch (Exception e) { JOptionPane.showMessageDialog(null, "Error al cargar CSV: " + e.getMessage()); }
+    }
+
+    // NUEVO: Agregar Producto
+    public void agregarNuevoProducto(String codigo, String nombre, String categoria, double precio) {
+        if (codigo == null || nombre == null || categoria == null) { JOptionPane.showMessageDialog(null, "Datos inválidos."); return; }
+        if (codigo.isBlank() || nombre.isBlank() || categoria.isBlank() || precio < 0) { JOptionPane.showMessageDialog(null, "Datos inválidos."); return; }
+        if (data.buscarProducto(codigo) != null) { JOptionPane.showMessageDialog(null, "Ya existe un producto con ese código."); return; }
+
+        producto nuevo = new producto(codigo, nombre, categoria, precio);
+        data.agregarProducto(nuevo);
+        data.agregarBitacora(new bitacora(user.getCodigo(), "Nuevo Producto", "Agregó " + nombre + " (" + codigo + ")"));
+        JOptionPane.showMessageDialog(null, "Producto agregado correctamente.");
     }
 }
